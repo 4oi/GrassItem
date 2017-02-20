@@ -1,5 +1,7 @@
 package life.grass.grassitem.uses;
 
+import java.util.stream.Stream;
+
 /**
  * Created by ecila on 2017/02/19.
  */
@@ -20,12 +22,7 @@ public enum Armor implements UsesType {
     }
 
     public static Armor getType(String key) {
-        for(Armor armor: Armor.values()) {
-            if(armor.getKey().equals(key)) {
-                return armor;
-            }
-        }
-        return null;
+        return Stream.of(Armor.values()).filter(t -> t.getKey().equals(key)).findFirst().orElse(null);
     }
 
     public static String getLabel() {
