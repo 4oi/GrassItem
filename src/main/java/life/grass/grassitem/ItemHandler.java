@@ -10,6 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.Map;
+import life.grass.grassitem.uses.UsesType;
 
 /**
  * Created by ecila on 2017/02/14.
@@ -107,6 +108,26 @@ public class ItemHandler {
     public void setArmorType(Armor armorType) {
         JsonObject json = new JsonObject();
         json.addProperty(Armor.getLabel(), armorType.getKey());
+        defaultJson.add("uses", json);
+    }
+
+    public <T extends Enum<T> & UsesType> T getType(Class<T> clazz) {
+        JsonObject uses = getDefaultUses();
+        if (uses == null) {
+            return null;
+        }
+        try {
+            String label = clazz.getSimpleName() + "_label";
+            return Enum.valueOf(clazz, uses.get(label).getAsString());
+        } catch (IllegalArgumentException ex) {
+            return null;
+        }
+    }
+
+    public <T extends Enum<T> & UsesType> void setType(Class<T> clazz, T value) {
+        JsonObject json = new JsonObject();
+        String label = clazz.getSimpleName() + "_label";
+        json.addProperty(label, value.getKey());
         defaultJson.add("uses", json);
     }
 
